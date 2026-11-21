@@ -1,0 +1,46 @@
+{
+  "name": "base64hub-mcp",
+  "version": "1.0.0",
+  "mcpName": "com.base64hub/mcp",
+  "description": "MCP server for exact Base64: encode, decode and validate tools for Claude, Cursor, VS Code and other MCP clients. No dependencies.",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "modelcontextprotocol",
+    "base64",
+    "base64url",
+    "encode",
+    "decode",
+    "validate",
+    "claude",
+    "cursor",
+    "ai-tools",
+    "llm-tools"
+  ],
+  "homepage": "https://base64hub.com/mcp/",
+  "bugs": {
+    "url": "https://github.com/base64hub-com/base64hub-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/base64hub-com/base64hub-mcp.git"
+  },
+  "license": "MIT",
+  "author": "base64hub <g@base64hub.com> (https://base64hub.com)",
+  "type": "module",
+  "bin": {
+    "base64hub-mcp": "bin/base64hub-mcp.js"
+  },
+  "files": [
+    "bin/base64hub-mcp.js",
+    "server.js",
+    "core.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

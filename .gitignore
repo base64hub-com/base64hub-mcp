@@ -1,0 +1,6 @@
+node_modules/
+*.tgz
+# Registry login material is created at publish time and never committed.
+key.pem
+mcp-registry-auth
+.mcpregistry_*

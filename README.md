@@ -1,0 +1,149 @@
+# base64hub-mcp
+
+An MCP server that gives AI assistants exact Base64: encode, decode and validate. Language models
+are unreliable at Base64 by hand; with this server Claude, Cursor, VS Code and any other
+[Model Context Protocol](https://modelcontextprotocol.io/) client get byte-exact results from three
+small tools.
+
+- Runs locally over stdio, nothing leaves your machine, no network access, no API key
+- Zero dependencies, a few hundred lines of plain Node.js (18 or newer)
+- Standard and URL-safe alphabets, padding control, line wrapping, data URIs
+- Lenient decoding with precise errors: `invalid character '!' at position 4`
+- Binary results are reported as hex instead of mangled text
+
+## Setup
+
+The server is started by your MCP client with `npx -y base64hub-mcp`. Node.js 18 or newer must be
+installed.
+
+### Claude Code
+
+```sh
+claude mcp add base64hub -- npx -y base64hub-mcp
+```
+
+Add `--scope user` to make it available in every project.
+
+### Claude Desktop
+
+Open **Settings → Developer → Edit Config** and add the server to `claude_desktop_config.json`
+(macOS: `~/Library/Application Support/Claude/`, Windows: `%APPDATA%\Claude\`), then restart Claude:
+
+```json
+{
+  "mcpServers": {
+    "base64hub": {
+      "command": "npx",
+      "args": ["-y", "base64hub-mcp"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Add it to `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (one project):
+
+```json
+{
+  "mcpServers": {
+    "base64hub": {
+      "command": "npx",
+      "args": ["-y", "base64hub-mcp"]
+    }
+  }
+}
+```
+
+### VS Code
+
+From a terminal:
+
+```sh
+code --add-mcp '{"name":"base64hub","type":"stdio","command":"npx","args":["-y","base64hub-mcp"]}'
+```
+
+Or in a workspace file. `.vscode/mcp.json` uses a top-level `servers` object:
+
+```json
+{
+  "servers": {
+    "base64hub": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "base64hub-mcp"]
+    }
+  }
+}
+```
+
+The portable `.mcp.json` at the workspace root (also read by Copilot) uses `mcpServers` with the
+same `command` and `args` as the Cursor example.
+
+### Other clients
+
+Any client that launches stdio servers works with command `npx` and arguments `-y base64hub-mcp`.
+On Windows, if a client can't find `npx`, use command `cmd` with arguments `/c npx -y base64hub-mcp`.
+
+## Tools
+
+All tools are read-only and work offline.
+
+### `base64_encode`
+
+Encode text (as UTF-8) to Base64.
+
+| Argument | Type | Default | Meaning |
+|---|---|---|---|
+| `text` | string | required | Text to encode |
+| `url_safe` | boolean | `false` | URL-safe alphabet (`-` and `_`, RFC 4648 §5) |
+| `padding` | boolean | `true` | Add `=` padding |
+| `wrap` | integer | `0` | Line break after every N characters (`76` = MIME) |
+
+`{"text": "Hello, hub!"}` → `SGVsbG8sIGh1YiE=`
+
+### `base64_decode`
+
+Decode Base64 to text. Accepts both alphabets (even mixed), missing padding, spaces, tabs and line
+breaks, and `data:...;base64,` URIs.
+
+| Argument | Type | Meaning |
+|---|---|---|
+| `data` | string | Base64 text or a data URI |
+
+`{"data": "SGVsbG8sIGh1YiE"}` → `Hello, hub!`
+
+When the bytes are not valid UTF-8 (an image, for example), the result says so and gives them as hex.
+Invalid input returns a tool error with the reason, such as `Invalid Base64: invalid character '!' at position 4.`
+
+### `base64_validate`
+
+Check a string without decoding it. Returns JSON, also as structured content:
+
+| Field | Meaning |
+|---|---|
+| `valid` | `true` exactly when `base64_decode` would succeed |
+| `variant` | `standard` (`+` or `/` seen), `url` (`-` or `_` seen), `mixed` (both) or `either` (neither) |
+| `padded` | the length including `=` is a multiple of 4 |
+| `bytes` | decoded size in bytes |
+| `error` | the error `base64_decode` would report (only when `valid` is `false`) |
+
+`{"data": "a+b_"}` → `{"valid":true,"variant":"mixed","padded":true,"bytes":3}`
+
+## Protocol
+
+JSON-RPC 2.0 over stdio, one message per line, written without an SDK. Supported MCP revisions:
+`2026-07-28` (stateless requests with per-request `_meta` and `server/discover`) and, through the
+`initialize` handshake, `2025-11-25`, `2025-06-18`, `2025-03-26` and `2024-11-05`. Logs go to stderr
+only.
+
+## Links
+
+- Server page: [base64hub.com/mcp/](https://base64hub.com/mcp/)
+- Documentation: [base64hub.com/docs/mcp/](https://base64hub.com/docs/mcp/)
+- Base64 tools in the browser: [base64hub.com](https://base64hub.com/)
+- Command line tool and library: [base64hub on npm](https://www.npmjs.com/package/base64hub)
+
+## License
+
+MIT

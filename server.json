@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.base64hub/mcp",
+  "title": "base64hub",
+  "description": "Exact Base64 for AI agents: encode, decode and validate (standard, URL-safe, data URIs).",
+  "version": "1.0.0",
+  "websiteUrl": "https://base64hub.com/mcp/",
+  "repository": {
+    "url": "https://github.com/base64hub-com/base64hub-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://base64hub.com/favicon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    },
+    {
+      "src": "https://base64hub.com/web-app-manifest-512x512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "base64hub-mcp",
+      "version": "1.0.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

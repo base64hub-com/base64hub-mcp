@@ -1,0 +1,40 @@
+name: docker
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to build from this ref and tag the image with, without the leading v
+        required: true
+permissions:
+  contents: read
+  packages: write
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and push ghcr.io/base64hub-com/base64hub-mcp
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          version="${INPUT_VERSION:-${GITHUB_REF_NAME#v}}"
+          case "$version" in [0-9]*.[0-9]*.[0-9]*) ;; *) echo "bad version: $version" >&2; exit 1 ;; esac
+          test "$version" = "$(node -p "require('./package.json').version")"
+          image="ghcr.io/${GITHUB_REPOSITORY_OWNER}/base64hub-mcp"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker buildx create --use
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            --label "io.modelcontextprotocol.server.name=com.base64hub/mcp" \
+            --label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
+            --label "org.opencontainers.image.url=https://base64hub.com/mcp/" \
+            --label "org.opencontainers.image.title=base64hub-mcp" \
+            --label "org.opencontainers.image.description=MCP server with exact Base64 encode, decode and validate tools" \
+            --label "org.opencontainers.image.licenses=MIT" \
+            --label "org.opencontainers.image.version=$version" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            --tag "$image:$version" --tag "$image:latest" --push .

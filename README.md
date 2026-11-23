@@ -81,6 +81,21 @@ Or in a workspace file. `.vscode/mcp.json` uses a top-level `servers` object:
 The portable `.mcp.json` at the workspace root (also read by Copilot) uses `mcpServers` with the
 same `command` and `args` as the Cursor example.
 
+### Docker
+
+The server is also published as a container image, for clients that run MCP servers in Docker:
+
+```json
+{
+  "mcpServers": {
+    "base64hub": {
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "ghcr.io/base64hub-com/base64hub-mcp"]
+    }
+  }
+}
+```
+
 ### Other clients
 
 Any client that launches stdio servers works with command `npx` and arguments `-y base64hub-mcp`.

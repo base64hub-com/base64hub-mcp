@@ -1,6 +1,6 @@
 {
   "name": "base64hub-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "mcpName": "com.base64hub/mcp",
   "description": "MCP server for exact Base64: encode, decode and validate tools for Claude, Cursor, VS Code and other MCP clients. No dependencies.",
   "keywords": [
@@ -35,12 +35,14 @@
   "files": [
     "bin/base64hub-mcp.js",
     "server.js",
+    "protocol.js",
     "core.js"
   ],
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "build:worker": "node scripts/build-worker.js"
   }
 }

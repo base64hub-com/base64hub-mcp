@@ -374,4 +374,5 @@ test('package.json and server.json agree', () => {
   assert.equal(npm.identifier, pkg.name);
   assert.equal(npm.version, pkg.version);
   assert.deepEqual(npm.transport, { type: 'stdio' });
+  assert.deepEqual(serverJson.remotes, [{ type: 'streamable-http', url: 'https://mcp.base64hub.com/mcp' }]);
 });

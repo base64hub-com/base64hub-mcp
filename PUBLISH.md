@@ -13,10 +13,14 @@ npm pack --dry-run
 
 Also run the identity grep from the "Identity" section of the base64hub software contract; it must
 print nothing. The log shows only `base64hub <g@base64hub.com>`, and the tarball lists exactly
-`LICENSE`, `README.md`, `package.json`, `bin/base64hub-mcp.js`, `core.js`, `server.js`.
+`LICENSE`, `README.md`, `package.json`, `bin/base64hub-mcp.js`, `core.js`, `protocol.js`, `server.js`.
 
 For a new version, bump `version` in `package.json` and both `version` fields in `server.json`
 (top level and `packages[0]`); the tests fail if they disagree.
+
+The hosted server changes with the package: after `node scripts/build-worker.js`, paste the new
+`worker.js` into the Cloudflare Worker (see `DEPLOY.md`) before publishing `server.json`, so the
+`remotes` entry never points at an older build.
 
 ## 1. npm
 

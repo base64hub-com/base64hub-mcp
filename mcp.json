@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "base64hub": {
+      "command": "npx",
+      "args": ["-y", "base64hub-mcp"]
+    }
+  }
+}

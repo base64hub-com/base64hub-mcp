@@ -1,0 +1,14 @@
+{
+  "name": "base64hub",
+  "version": "1.1.0",
+  "description": "Exact Base64 for the agent: encode, decode and validate text with the standard or URL-safe alphabet, including data URIs. Runs locally, no network access.",
+  "author": {
+    "name": "base64hub",
+    "email": "g@base64hub.com"
+  },
+  "homepage": "https://base64hub.com/mcp/",
+  "repository": "https://github.com/base64hub-com/base64hub-mcp",
+  "license": "MIT",
+  "keywords": ["base64", "base64url", "encode", "decode", "mcp"],
+  "logo": "assets/logo.svg"
+}

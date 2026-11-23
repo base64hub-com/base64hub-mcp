@@ -376,3 +376,11 @@ test('package.json and server.json agree', () => {
   assert.deepEqual(npm.transport, { type: 'stdio' });
   assert.deepEqual(serverJson.remotes, [{ type: 'streamable-http', url: 'https://mcp.base64hub.com/mcp' }]);
 });
+
+test('the Cursor plugin manifest matches the package', () => {
+  const plugin = JSON.parse(readFileSync(new URL('../.cursor-plugin/plugin.json', import.meta.url), 'utf8'));
+  const mcp = JSON.parse(readFileSync(new URL('../mcp.json', import.meta.url), 'utf8'));
+  assert.equal(plugin.version, pkg.version);
+  assert.match(plugin.name, /^[a-z0-9][a-z0-9.-]*[a-z0-9]$/);
+  assert.deepEqual(mcp.mcpServers.base64hub, { command: 'npx', args: ['-y', pkg.name] });
+});

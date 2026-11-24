@@ -1,5 +1,7 @@
 # base64hub-mcp
 
+[![base64hub-com/base64hub-mcp MCP server](https://glama.ai/mcp/servers/base64hub-com/base64hub-mcp/badges/score.svg)](https://glama.ai/mcp/servers/base64hub-com/base64hub-mcp)
+
 An MCP server that gives AI assistants exact Base64: encode, decode and validate. Language models
 are unreliable at Base64 by hand; with this server Claude, Cursor, VS Code and any other
 [Model Context Protocol](https://modelcontextprotocol.io/) client get byte-exact results from three
